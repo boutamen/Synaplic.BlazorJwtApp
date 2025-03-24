@@ -42,7 +42,7 @@ Synaplic.BlazorJwtApp is a **Blazor WebAssembly Hosted** application implementin
 ### **1️⃣ Clone the Repository**
 
 ```sh
-git clone https://github.com/your-repo/Synaplic.BlazorJwtApp.git
+git clone https://github.com/boutamen/Synaplic.BlazorJwtApp.git
 cd Synaplic.BlazorJwtApp
 ```
 
