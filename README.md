@@ -1,4 +1,4 @@
-﻿# Synaplic.BlazorJwtApp
+# Synaplic.BlazorJwtApp
 
 Synaplic.BlazorJwtApp is a **Blazor WebAssembly Hosted** application implementing **JWT authentication** with **role-based claims permissions**. This project demonstrates **secure authentication, authorization, and API access control** using .NET 8.
 
@@ -6,14 +6,14 @@ Synaplic.BlazorJwtApp is a **Blazor WebAssembly Hosted** application implementin
 
 ## 🚀 Features
 
-✅ **JWT Authentication**: Users log in with JWT tokens.
-✅ **Role-Based Claims Authorization**: Permissions are dynamically enforced using claims-based policies.
-✅ **Blazor WebAssembly Client**: A modern, interactive frontend.
-✅ **ASP.NET Core API**: Secure backend with authentication and role management.
-✅ **Token Management**: Supports access and refresh tokens.
-✅ **LocalStorage Integration**: Stores authentication tokens persistently.
-✅ **Automatic Token Injection**: `AuthHeaderHandler` ensures secure API requests.
-✅ **Database Seed**: Auto-creates roles and users with predefined permissions.
+- ✅ **JWT Authentication**: Users log in with JWT tokens.
+- ✅ **Role-Based Claims Authorization**: Permissions are dynamically enforced using claims-based policies.
+- ✅ **Blazor WebAssembly Client**: A modern, interactive frontend.
+- ✅ **ASP.NET Core API**: Secure backend with authentication and role management.
+- ✅ **Token Management**: Supports access and refresh tokens.
+- ✅ **LocalStorage Integration**: Stores authentication tokens persistently.
+- ✅ **Automatic Token Injection**: `AuthHeaderHandler` ensures secure API requests.
+- ✅ **Database Seed**: Auto-creates roles and users with predefined permissions.
 
 ---
 
@@ -52,7 +52,7 @@ cd Synaplic.BlazorJwtApp
 - Set up **SQL Server** connection string.
 - Configure JWT settings (`Issuer`, `Audience`, `Key`).
 
-### **3️⃣ Apply Database Migrations**
+### **3️⃣ Apply Database Migrations Optional**
 
 ```sh
 dotnet ef database update --project Server
@@ -109,7 +109,6 @@ public IEnumerable<WeatherForecast> GetAsBasic() { ... }
 - **Entity Framework Core** – Database integration.
 - **JWT Authentication** – Secure login and token management.
 - **Blazored.LocalStorage** – Persistent token storage.
-- **MudBlazor** – UI Components (Optional).
 
 ---
 
