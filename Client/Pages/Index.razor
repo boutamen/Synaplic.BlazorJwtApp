@@ -1,0 +1,51 @@
+﻿@page "/"
+@inject ApiAuthenticationStateProvider AuthStateProvider
+@inject IAuthorizationService AuthorizationService
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+<p>Welcome to your new app.</p>
+
+
+<h3>🔹 Permissions</h3>
+
+<ul>
+    <li><strong>Admin Weather Access:</strong> @_canGetAdminWeather</li>
+    <li><strong>Basic Weather Access:</strong> @_canGetBasicWeather</li>
+</ul>
+
+@if (PermissionsList.Any())
+{
+    <h3>🔹 Assigned Permissions</h3>
+    <ul>
+        @foreach (var permission in PermissionsList)
+        {
+            <li>@permission</li>
+        }
+    </ul>
+}
+else
+{
+    <p><em>No permissions assigned.</em></p>
+}
+
+@code {
+    private bool _canGetAdminWeather, _canGetBasicWeather;
+    private List<string> PermissionsList = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var claimsPrincipal = await AuthStateProvider.GetAuthStateUserAsync();
+
+        _canGetAdminWeather = (await AuthorizationService.AuthorizeAsync(claimsPrincipal, Permissions.GetAdminWeather)).Succeeded;
+        _canGetBasicWeather = (await AuthorizationService.AuthorizeAsync(claimsPrincipal, Permissions.GetBasicWeather)).Succeeded;
+
+        // 🔹 Extract all permissions from claims
+        PermissionsList = claimsPrincipal.Claims
+            .Where(c => c.Type == AuthenticationConstants.AuthPermission) // Use the claim type used in the JWT
+            .SelectMany(c => c.Value.Split(',')) // Convert CSV claim value to list
+            .Distinct()
+            .ToList();
+    }
+}

@@ -1,0 +1,81 @@
+﻿
+@inherits LayoutComponentBase
+@inject NavigationManager Navigation
+@inject ApiAuthenticationStateProvider AuthStateProvider
+
+<CascadingAuthenticationState>
+	<AuthorizeView>
+		<Authorized>
+			<div class="page">
+				<div class="sidebar">
+					<NavMenu />
+				</div>
+
+				<main>
+					<div class="top-row px-4 d-flex justify-content-between align-items-center">
+						<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+
+						<div>
+							<span class="text-muted">Hello, @UserName  !</span>
+							<button class="btn btn-link" @onclick="Logout">Logout</button>
+						</div>
+					</div>
+
+					<article class="content px-4">
+						@Body
+					</article>
+				</main>
+			</div>
+		</Authorized>
+
+		<NotAuthorized>
+			@if (!Navigation.Uri.Contains("login"))
+			{
+				Navigation.NavigateTo("/login");
+			}
+		</NotAuthorized>
+	</AuthorizeView>
+</CascadingAuthenticationState>
+
+@code 
+{
+	private string UserName = "Guest";
+
+	protected override async Task OnInitializedAsync()
+	{
+		Console.WriteLine("MainLayout.razor OnInitializedAsync start");
+		var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+		var user = authState.User;
+
+		Console.WriteLine("User.Identity.IsAuthenticated: " + user.Identity.IsAuthenticated);
+	 
+
+	 
+		if (user.Identity.IsAuthenticated)
+		{
+			UserName = user.Identity.Name ;
+
+			// Iterate through claims and log them
+			// foreach (var claim in user.Claims)
+			// {
+			// 	Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+			// }
+		}
+		else
+		{
+			UserName = "IsNotAuthenticated";
+		}
+		Console.WriteLine("MainLayout.razor OnInitializedAsync end");
+	}
+
+
+	async Task Logout()
+	{
+		Console.WriteLine("MainLayout.razor Logout start");
+		await AuthStateProvider.MarkUserAsLoggedOut();
+
+		Navigation.NavigateTo("login", true);
+
+		Console.WriteLine("MainLayout.razor Logout end");
+	}
+}

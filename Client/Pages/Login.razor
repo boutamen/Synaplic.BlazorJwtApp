@@ -1,0 +1,80 @@
+﻿@page "/login"
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@inject ApiAuthenticationStateProvider AuthStateProvider
+
+@attribute [AllowAnonymous]
+@layout MinimalLayout
+ 
+
+<EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label class="form-label">Username</label>
+        <InputText @bind-Value="loginModel.Username" class="form-control" />
+        <ValidationMessage For="@(() => loginModel.Username)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <InputText @bind-Value="loginModel.Password" type="password" class="form-control" />
+        <ValidationMessage For="@(() => loginModel.Password)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100" disabled="@isLoading">
+        @(isLoading ? "Logging in..." : "Login")
+    </button>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mt-3">@errorMessage</div>
+    }
+</EditForm>
+
+@code {
+    private LoginRequestDTO loginModel = new();
+    private bool isLoading = false;
+    private string errorMessage = string.Empty;
+
+    private async Task HandleLogin()
+    {
+        isLoading = true;
+        errorMessage = string.Empty;
+
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/auth/login", loginModel);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<AuthResponseDTO>();
+
+                if (result is not null)
+                {
+                    // Store token using ApiAuthenticationStateProvider
+                    await AuthStateProvider.MarkUserAsAuthenticated(result.Token);
+
+                    // Store refresh token separately if needed
+                    await LocalStorage.SetItemAsync("refreshToken", result.RefreshToken);
+
+                    // Redirect to homepage
+                    Navigation.NavigateTo("/", true);
+                }
+            }
+            else
+            {
+                errorMessage = "Invalid username or password!";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred. Please try again.";
+            Console.Error.WriteLine($"Login error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
