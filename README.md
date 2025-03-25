@@ -52,7 +52,7 @@ cd Synaplic.BlazorJwtApp
 - Set up **SQL Server** connection string.
 - Configure JWT settings (`Issuer`, `Audience`, `Key`).
 
-### **3️⃣ Apply Database Migrations Optional**
+### **3️⃣ Apply Database Migrations "Optional" **
 
 ```sh
 dotnet ef database update --project Server
@@ -76,8 +76,8 @@ This application enforces **fine-grained permissions** using **claims-based auth
 
 | Role    | Assigned Permissions                           |
 | ------- | --------------------------------------------- |
-| `Admin` | Full access, can manage users and settings.   |
-| `Basic` | Limited access, can only fetch weather data. |
+| `Admin` | Full access.   |
+| `Basic` | Limited access, can only fetch basic weather data. |
 
 ### **Default Users & Passwords**
 
