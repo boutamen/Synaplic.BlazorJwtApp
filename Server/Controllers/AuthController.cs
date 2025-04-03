@@ -27,8 +27,10 @@ namespace Synaplic.BlazorJwtApp.Server.Controllers
         public async Task<IActionResult> Login(LoginRequestDTO request)
         {
             var user = await _userManager.FindByNameAsync(request.Username);
-            if (user == null )
+            if (user == null ) user = await _userManager.FindByEmailAsync(request.Username);
+            if (user == null)  
             {
+
                 return Unauthorized(new { Message = "Invalid username" });
             }
             Console.WriteLine("🔹 User found");
