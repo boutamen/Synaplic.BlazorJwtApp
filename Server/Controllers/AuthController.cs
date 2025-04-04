@@ -26,6 +26,7 @@ namespace Synaplic.BlazorJwtApp.Server.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequestDTO request)
         {
+            Console.WriteLine("🔹 Login called with username: " + request.Username);
             var user = await _userManager.FindByNameAsync(request.Username);
             if (user == null ) user = await _userManager.FindByEmailAsync(request.Username);
             if (user == null)  
@@ -66,6 +67,7 @@ namespace Synaplic.BlazorJwtApp.Server.Controllers
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh(RefreshTokenRequestDTO request)
         {
+            Console.WriteLine("🔹 Refresh called with token: " + request.Token);
             var storedToken = await _context.RefreshTokens
                 .FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken);
 

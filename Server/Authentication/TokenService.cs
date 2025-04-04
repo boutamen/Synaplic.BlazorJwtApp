@@ -24,6 +24,7 @@ namespace Synaplic.BlazorJwtApp.Server.Authentication
 
         public async Task<string> GenerateJwtToken(IdentityUser user)
         {
+            Console.WriteLine("🔹 GenerateJwtToken called for user: " + user.UserName);
             var userRoles = await _userManager.GetRolesAsync(user);
 
             var claims = new List<Claim>
@@ -67,6 +68,7 @@ namespace Synaplic.BlazorJwtApp.Server.Authentication
 
         public string GenerateRefreshToken()
         {
+            Console.WriteLine("🔹 GenerateRefreshToken called");
             var randomNumber = new byte[64]; // Increase randomness strength
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomNumber);
@@ -75,6 +77,7 @@ namespace Synaplic.BlazorJwtApp.Server.Authentication
 
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
+            Console.WriteLine("🔹 GetPrincipalFromExpiredToken called with token: " + token);
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
